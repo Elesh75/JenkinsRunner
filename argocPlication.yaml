@@ -7,7 +7,7 @@ spec:
   project: default
   source:
     repoURL: https://github.com/Elesh75/JenkinsRunner.git
-    targetRevision: HEAD # or specify the Git branch/tag/commit you want to deploy
+    targetRevision: head # or specify the Git branch/tag/commit you want to deploy
     path: Dev
   destination:
     server: https://kubernetes.default.svc  # The address of your Kubernetes cluster
