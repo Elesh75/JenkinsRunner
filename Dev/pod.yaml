@@ -2,6 +2,8 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: demo
+  labels:
+     app: demo1
 spec:
   replicas: 4
   selector:
@@ -15,3 +17,5 @@ spec:
       containers:
       - name: App
         image: mylandmarktech/spring-boot-mongo:latest
+        resources: {}
+    status: {}
