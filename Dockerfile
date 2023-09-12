@@ -1,34 +1,7 @@
-# JenkinsRunner
-Integrating Jenkins with Argo-CD
+FROM jenkins/jenkins:lts
 
-# install ArgoCD in k8s
-kubectl create namespace argocd
+USER root
 
-kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
-
-# access ArgoCD UI
-kubectl get svc -n argocd
-kubectl port-forward svc/argocd-server 8080:443 -n argocd
-
-# login with admin user and below token (as in documentation):
-kubectl get secret argocd-initial-admin-secret -o yaml
-echo (U1dvYmg0YnZCa3kzLUFGdA==) | base64 --decode # the password in bracket is gotten from the above command
-
-# you can change and delete init password
-
-# Switch to argodc namespace
-# Modify the application.yaml with your git repository and apply to the cluster.
-kubectl apply -f application.yaml
-
-# Apply the secret in your cluster. In place of password, use token
-Create a secret.yaml file which will contain the credentials of your private repo if you are using a private repo and apply in the argocd namespace
-kubectl apply -f secrets.yaml
-
-# Push your manifest files to your repo
---------------
-Then you configure youe jenkins server with all the neccessaary packages OR Deploy yu jenkins as a container (i.e)
-Create a docker file using official jenkins base image and Run the following commands 
-You must run all this command as a root user after which you can switch back to jenkins user
 # Install required packages
 RUN apt-get update && apt-get install -y \
     curl \
@@ -85,5 +58,3 @@ USER jenkins
 
 # Set the default command for Jenkins
 CMD ["/usr/local/bin/jenkins.sh"]
-
-After this, you can now create your pipeline script to run the pipeline workload/task
