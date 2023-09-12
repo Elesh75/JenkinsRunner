@@ -1,4 +1,7 @@
 @Library('SharedLibrary') _
+import org.mycompany.MyPipeline
+
+def call() {
      pipeline {
         agent any
         tools {
@@ -42,4 +45,5 @@
                 }
             }
   }
+}
 }
