@@ -1,21 +1,16 @@
 @Library('SharedLibarary') _
-import org.mycompany.MyPipeline
-
-def call() {
-    pipeline {
+     pipeline {
         agent any
         tools {
             maven "mvn"
         }
-
-         stages {
+        stages {
             stage('Checkout') {
                 steps {
                     echo 'Cloning Code...'
                     git 'https://github.com/Elesh75/maven-web-application'
                 }
             }
-        stages {
             stage('Build') {
                 steps {
                     echo 'Building the project...'
@@ -46,7 +41,5 @@ def call() {
                     sh "docker push skate754/jen:1"
                 }
             }
-        }
-    }
   }
 }
