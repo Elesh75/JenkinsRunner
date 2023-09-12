@@ -1,0 +1,52 @@
+@Library('SharedLibarary') _
+import org.mycompany.MyPipeline
+
+def call() {
+    pipeline {
+        agent any
+        tools {
+            maven "mvn"
+        }
+
+         stages {
+            stage('Checkout') {
+                steps {
+                    echo 'Cloning Code...'
+                    git 'https://github.com/Elesh75/maven-web-application'
+                }
+            }
+        stages {
+            stage('Build') {
+                steps {
+                    echo 'Building the project...'
+                    common("Build")
+                }
+            }
+            stage('Test') {
+                steps {
+                    echo 'Running tests...'
+                    common("SonarQube Report")
+                }
+            }
+            stage('Deploy') {
+                steps {
+                    echo 'Uploading Package...'
+                    common("Upload Into Nexus")
+                }
+            }
+            stage('Containerizing our application') {
+                steps {
+                    echo 'Building Image...'
+                    sh "docker buildx build -t jen ."
+                }
+            }
+             stage('Push to image registry') {
+                steps {
+                    echo 'Uploading Image to refgistry...'
+                    sh "docker push skate754/jen:1"
+                }
+            }
+        }
+    }
+  }
+}
