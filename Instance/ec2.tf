@@ -70,9 +70,9 @@ resource "aws_instance" "ansible_bootstrap" {
               sudo adduser ansible
               echo "ansible  ALL=(ALL) NOPASSWD:ALL" | sudo tee /etc/sudoers.d/ansible
               sudo su - ansible
-              sudo dnf install python3 python3-pip -y
-              sudo dnf -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
-              sudo dnf install  --enablerepo epel-playground  ansible
+              sudo apt-add-repository ppa:ansible/ansible  
+              sudo apt install ansible  -y 
+              sudo chown ansible:ansible -R  /etc/ansible/
               EOF
 
   tags = {
