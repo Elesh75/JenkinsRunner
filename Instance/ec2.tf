@@ -18,8 +18,8 @@ default = ["Sonar", "Nexus", "Ansible"]
 }
 
 resource "aws_key_pair" "key" {
-  key_name   = "DEMO2"
-  public_key = file("demo3.pub")
+  key_name   = "name of your choice"
+  public_key = file("/path/to/your/public_key")
 }
 
 
@@ -61,6 +61,7 @@ resource "aws_instance" "ansible_bootstrap" {
   count         = contains(var.instance_names, "Ansible") ? 1 : 0
   instance_type = "t2.micro"
   ami           = data.aws_ami.amzlinux2.id
+  key_name      = aws_key_pair.key.key_name
 
   user_data = <<-EOF
               #!/bin/bash
@@ -70,8 +71,9 @@ resource "aws_instance" "ansible_bootstrap" {
               sudo adduser ansible
               echo "ansible  ALL=(ALL) NOPASSWD:ALL" | sudo tee /etc/sudoers.d/ansible
               sudo su - ansible
-              sudo apt-add-repository ppa:ansible/ansible  
-              sudo apt install ansible  -y 
+              sudo yum update -y
+              sudo yum makecache  
+              sudo amazon-linux-extras install ansible2  -y 
               sudo chown ansible:ansible -R  /etc/ansible/
               EOF
 
