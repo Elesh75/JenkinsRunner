@@ -59,7 +59,7 @@ data "aws_ami" "amzlinux2" {
 # Define the bootstrap script for Ansible instance
 resource "aws_instance" "ansible_bootstrap" {
   count         = contains(var.instance_names, "Ansible") ? 1 : 0
-  instance_type = "t2.micro"
+  instance_type = "t2.medium"
   ami           = data.aws_ami.amzlinux2.id
   key_name      = aws_key_pair.key.key_name
 
