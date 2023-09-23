@@ -1,16 +1,23 @@
-FROM tomcat
+FROM tomcat:9.0-jre8
 
-RUN apt-get update && apt-get -y upgrade
-
-# Set environment variables, adjust as needed
+# Set environment variables (optional but recommended)
 ENV CATALINA_HOME /usr/local/tomcat
+ENV PATH $CATALINA_HOME/bin:$PATH
 
-WORKDIR $CATALINA_HOME
+WORKDIR /usr/local/tomcat/webapps/ROOT
 
-COPY source $CATALINA_HOME/webapps
+COPY /var/jenkins_home/workspace/jen2/target/tesla.war .
 
-# Expose the HTTP port
-EXPOSE 8081
+RUN rm -rf /usr/local/tomcat/webapps/*
+
+RUN unzip -q tesla.war -d .
+
+RUN rm tesla.war
+
+# Expose the default Tomcat port (8080) if necessary
+EXPOSE 8080
 
 # Start Tomcat when the container starts
+CMD ["catalina.sh", "run"]
+
 
