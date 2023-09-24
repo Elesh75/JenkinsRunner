@@ -1,7 +1,4 @@
 @Library('SharedLibrary') _
-import org.mycompany.MyPipeline
-
-def call() {
      pipeline {
         agent any
         tools {
@@ -44,6 +41,5 @@ def call() {
                     sh "docker push skate754/jen:1"
                 }
             }
-  }
-}
-}
+       } 
+    }
