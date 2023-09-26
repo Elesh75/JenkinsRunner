@@ -29,6 +29,30 @@
                     common("Upload Into Nexus")
                 }
             }
+
+                        stage('Build Docker Image') {
+                steps {
+                    sh 'pwd'
+                    // Build a Docker image with the WAR artifact
+                    script {
+                        def dockerImage = 'my-app:latest'  // Customize the image name and tag
+                        def dockerfile = '''
+                            FROM tomcat:9-jdk11-openjdk-slim
+                            COPY ./target/tesla.war /usr/local/tomcat/webapps/
+                            EXPOSE 8080
+                            CMD ["catalina.sh", "run"]
+                        '''
+                    
+                            // Write the Dockerfile to a temporary file
+                            def dockerfileContent = dockerfile.toString()
+                            writeFile file: 'Dockerfile', text: dockerfileContent
+                    
+                            // Build the Docker image
+                            docker.build(dockerImage, "--file Dockerfile .")
+                    }
+                }
+            }  
+
             stage('Containerizing our application') {
                 steps {
                     echo 'Building Image...'
