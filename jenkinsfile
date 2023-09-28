@@ -1,5 +1,5 @@
 @Library('SharedLibrary') _
-     pipeline {
+    pipeline {
         agent any
         tools {
             maven "mvn"
@@ -7,6 +7,7 @@
         stages {
             stage('Checkout') {
                 steps {
+                    sh 'pwd'
                     echo 'Cloning Code...'
                     git 'https://github.com/Elesh75/maven-web-application'
                 }
@@ -20,22 +21,21 @@
             stage('Test') {
                 steps {
                     echo 'Running tests...'
-                    common("SonarQube Report")
+                    //common("SonarQube Report")
                 }
             }
             stage('Deploy') {
                 steps {
                     echo 'Uploading Package...'
-                    common("Upload Into Nexus")
+                    //common("Upload Into Nexus")
                 }
             }
-
-                        stage('Build Docker Image') {
+            stage('Build Docker Image') {
                 steps {
                     sh 'pwd'
-                    // Build a Docker image with the WAR artifact
+                    //Build a Docker image with the WAR artifact
                     script {
-                        def dockerImage = 'my-app:latest'  // Customize the image name and tag
+                        def dockerImage = 'jen:1'  // Customize the image name and tag
                         def dockerfile = '''
                             FROM tomcat:9-jdk11-openjdk-slim
                             COPY ./target/tesla.war /usr/local/tomcat/webapps/
@@ -43,27 +43,24 @@
                             CMD ["catalina.sh", "run"]
                         '''
                     
-                            // Write the Dockerfile to a temporary file
+                            //Write the Dockerfile to a temporary file
                             def dockerfileContent = dockerfile.toString()
                             writeFile file: 'Dockerfile', text: dockerfileContent
                     
-                            // Build the Docker image
+                            //Build the Docker image
                             docker.build(dockerImage, "--file Dockerfile .")
+                        }
                     }
                 }
-            }  
-
-            stage('Containerizing our application') {
-                steps {
-                    echo 'Building Image...'
-                    sh "docker buildx build -t jen ."
-                }
-            }
-             stage('Push to image registry') {
+            stage('Push to image registry') {
                 steps {
                     echo 'Uploading Image to refgistry...'
-                    sh "docker push skate754/jen:1"
+                    sh 'docker tag jen:1 skate754/pipeline:1'
+                    // This step should not normally be used in your script. Consult the inline help for details.
+                    withDockerRegistry(credentialsId: 'Dock-Cred', url: 'https://index.docker.io/v1/') {
+                    sh "docker push skate754/pipeline:1"
+                  }
                 }
             }
-       } 
+       }
     }
