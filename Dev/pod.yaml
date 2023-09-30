@@ -18,6 +18,5 @@ spec:
       - name: app
         image: skate754/pipeline:1
         resources: {}
-    status: {}
       ports:
        - containerPort: 8080
