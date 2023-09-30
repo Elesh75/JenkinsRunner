@@ -16,6 +16,8 @@ spec:
     spec:
       containers:
       - name: app
-        image: mylandmarktech/spring-boot-mongo:latest
+        image: skate754/pipeline:1
         resources: {}
     status: {}
+      ports:
+       - containerPort: 8080
