@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: app
-        image: skate754/pipeline:1
+        image: skate754/pipeline:3
         resources: {}
-      ports:
-       - containerPort: 8080
+        ports:
+         - containerPort: 8080
